@@ -1,0 +1,7 @@
+1. need to figure out spacy stuff
+    - look at line class and go line by line
+2. need to do pronouncing stuff line and poem class
+3. need to figure out mutations
+4. write cross over
+5. inspiring set figure out web scraping
+6. fitness 
