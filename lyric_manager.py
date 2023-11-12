@@ -1,24 +1,14 @@
-from lyricsgenius import Genius
+
 from collections import Counter
 import spacy 
+from song_manager import SongManager
 class LyricManager:
-    def __init__(self, title="Sunset For the Dead", artist="Tommy Newport"):
+    def __init__(self, lyrics = SongManager().get_song_lyrics()):
         self.nlp = spacy.load('en_core_web_sm') 
-        self.title = title
-        self.artist = artist
-        self.genius = Genius("sgc_vVn5Mvy0s0ejFc2keVpZnvK1I0YI9_pyWwNLTNwrqiRGjiBdkTKzY1jgKu-I")
-        self.lyrics = self.get_song_lyics()
+        self.lyrics = lyrics
         self.nlpsong = self.nlp(self.lyrics)
         self.noundict = self.get_nouns()
 
-    def print_songs(self):
-        artist = self.genius.search_artist("Childish Gambino", max_songs=3, sort="title")
-        print(artist.songs)
-
-    def get_song_lyics(self):
-        song = self.genius.search_song(self.artist, self.title)
-        #print(song.lyrics)
-        return song.lyrics
 
     def remove_stop_words(self):
         filtered_tokens = [token for token in self.nlpsong]
@@ -36,7 +26,9 @@ class LyricManager:
         
     def get_noun_dict(self):
         return self.noundict
-    
+        
+    def get_song_lyrics(self):
+        return self.lyrics
 
 
         
@@ -45,6 +37,7 @@ def main():
     #print(genius.remove_stop_words())
     genius.get_nouns()
     print(genius.get_noun_dict())
+   
 
     
 if __name__ == "__main__":

@@ -1,13 +1,16 @@
 
 import numpy as np
 from line import Line
-import pronouncing
+from lyric_manager import LyricManager
+
+
 class Poem:
-    def __init__(self,lines):
+    def __init__(self,lines,song=LyricManager()):
+        self.lyric = song
         self.rhyme = 0 # set rhyme scheme here
         self.lines = []
         for line in lines:
-            self.lines.append(Line(line))
+            self.lines.append(Line(line,self.lyric))
 
     def getFitness(self):
         return np.random.rand()

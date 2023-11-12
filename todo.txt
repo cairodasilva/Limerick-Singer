@@ -1,3 +1,4 @@
+
 input 
         --> spotify valence - to get emotion and then match that with 
             sentiment value and lyrics
@@ -9,22 +10,26 @@ rules for limerick
 inspiring set 
         -> all limericks can use web scraping or python api
 
-crossover 
-        -> match rhyme scheme after 
-    
-mutations 
-        -> change rhyme word (in poem class) / fit accent
-        -> change proper noun (in line class) / fit accent
-        -> change verb / fit accent
 
 Genetic Algorithm 
         -> needs to iterate over
+    crossover 
+            -> match rhyme scheme after
+
+mutations 
+        -> change rhyme word (in poem class)
+        -> change proper noun (in line class) 
+        -> change verb 
 
 Main Function
         -> needs to ask the questions and then run
-        -> also need __repr__ stuff
+        -> also need __repr__ stuff for every class
 fitness
         -> fits song sentiment closely
         -> fits rhyme scheme
         -> fits meter
         -> closest in similarity to song lyrics
+
+things to figure out 
+    -> song doesnt exist and cant get lyrics
+    -> replacing words and making sure they can make sense
