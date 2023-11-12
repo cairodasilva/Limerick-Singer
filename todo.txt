@@ -1,7 +1,25 @@
-1. need to figure out spacy stuff
-    - look at line class and go line by line
-2. need to do pronouncing stuff line and poem class
-3. need to figure out mutations
-4. write cross over
-5. inspiring set figure out web scraping
-6. fitness 
+input 
+        --> spotify valence - to get emotion and then match that with 
+            sentiment value and lyrics
+rules for limerick 
+        --> five lines - AABBA
+        --> accents go 0100101 or 01001
+        --> syllables go  7 7 5 5 7
+
+inspiring set 
+        -> all limericks can use web scraping or python api
+
+crossover 
+        -> match rhyme scheme after 
+    
+mutations 
+        -> change rhyme word (in poem class) / fit accent
+        -> change proper noun (in line class) / fit accent
+        -> change verb / fit accent
+
+fitness
+        -> fits song sentiment closely
+        -> fits rhyme scheme
+        -> fits meter
+        -> closest in similarity to song lyrics
+        

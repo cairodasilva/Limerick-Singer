@@ -14,6 +14,7 @@ class genetic:
                 poem_lines = f.readlines()
                 new_poem = Poem(poem_lines)
                 self.poems.append(new_poem)
+
     def crossover(self,poem1,poem2):
         num_lines = 6
         pivot = np.random.randint(0,5)
@@ -27,7 +28,6 @@ class genetic:
         section2 = second_poem.getLines()[pivot:]
         
         new_poem = Poem(section1 + section2)
-        print(section1+section2)
         return new_poem
 
 
@@ -45,6 +45,7 @@ class genetic:
             poem1,poem2 = np.random.choice(self.poems,p = p,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
+            new_poem.mutate()
             next_generation.append(new_poem)
 
 """

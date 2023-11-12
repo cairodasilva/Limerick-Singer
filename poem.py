@@ -8,6 +8,7 @@ class Poem:
         self.lines = []
         for line in lines:
             self.lines.append(Line(line))
+
     def getFitness(self):
         return np.random.rand()
 
@@ -16,6 +17,14 @@ class Poem:
         for line in self.lines:
             lines.append(line.getText())
         return lines
+
+    def mutate(self):
+        lines = self.lines
+        choice = np.random.randint(1,4) #choose between mutating 1 and 3 lines
+        print(str(choice) + "lines")
+        mutated_lines = np.random.choice(lines, size = choice, replace = False)
+        for line in mutated_lines:
+            line = line.mutate()
 
 
 
