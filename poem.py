@@ -5,14 +5,15 @@ from lyric_manager import LyricManager
 
 
 class Poem:
-    def __init__(self,lines,song=LyricManager()):
+    def __init__(self,lines,song = LyricManager()):
         
         self.lyric = song
         self.rhyme = "AABBA" # set rhyme scheme here
         self.lines = []
         for line in lines:
             stripped_line = line.strip()
-            self.lines.append(Line(stripped_line,self.lyric))
+            if len(stripped_line) > 0:
+                self.lines.append(Line(stripped_line,self.lyric))
 
     def getFitness(self):
         return np.random.rand()

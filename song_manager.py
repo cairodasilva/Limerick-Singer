@@ -6,13 +6,15 @@ class SongManager:
         self.title = title
         self.artist = artist
         self.genius = Genius("sgc_vVn5Mvy0s0ejFc2keVpZnvK1I0YI9_pyWwNLTNwrqiRGjiBdkTKzY1jgKu-I")
-        self.lyrics = self.make_song_lyrics()
+        self.lyrics = ''
 
     def make_song_lyrics(self):
-        song = self.genius.search_song(self.artist, self.title)
-        return song.lyrics
+        self.lyrics = self.genius.search_song(self.artist, self.title).lyrics
+        return self.lyrics
 
     def get_song_lyrics(self):
+        if self.lyrics == '':
+            return self.make_song_lyrics()
         return self.lyrics
  
         

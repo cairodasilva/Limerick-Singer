@@ -1,7 +1,9 @@
 from line import Line
+import requests
 from poem import Poem
 import numpy as np
 import os
+print ("cairo cairo cairo")
 from song_manager import SongManager
 
 class genetic:
@@ -9,8 +11,9 @@ class genetic:
         self.iterations = iterations
         self.inspiring_set = []
         self.poems = []
-        self.song = SongManager().get_song_lyrics()
-
+        print("initialing song manager")
+        self.song = SongManager().make_song_lyrics()
+    
     def create_poems(self):
         dir = "./inspiring_set"
         for file in os.listdir(dir):
@@ -18,6 +21,14 @@ class genetic:
                 poem_lines = f.readlines()
                 new_poem = Poem(poem_lines,self.song)
                 self.poems.append(new_poem)
+    def create_inspiring_set(self):
+        url = "https://poetrydb.org/author/Algernon%20Charles%20Swinburne"
+        response = requests.get(url)
+        if response.status_code == 200:
+            data = response.json()
+            print(data)
+        else:
+            print(f"Error: {response.status_code}")
 
     def crossover(self,poem1,poem2):
         num_lines = 6
@@ -71,6 +82,7 @@ def main():
     # "What song do you want to base your poem off of? "))
     # artist = str(input(
     # "Which artist is that song made by?"))
+    print("song manager")
     runner = genetic(0)
     runner.create_poems()
     runner.genetic_algo()
