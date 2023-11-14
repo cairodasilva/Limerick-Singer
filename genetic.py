@@ -10,6 +10,7 @@ class genetic:
         self.inspiring_set = []
         self.poems = []
         self.song = SongManager().get_song_lyrics()
+
     def create_poems(self):
         dir = "./inspiring_set"
         for file in os.listdir(dir):
@@ -50,46 +51,30 @@ class genetic:
             new_poem = self.crossover(poem1,poem2)
             new_poem.mutate()
             next_generation.append(new_poem)
+        self.poems = next_generation
+
     def genetic_algo_runner(self):
         for i in range(self.iterations):
             print(f"Running genetic algorithm for generation {i + 1}")
             self.genetic_algo() 
-"""
-    def create_inspiring(self):
-        # iterate through all nature poems and get the most fit ones and then 
-        #add to inpiring set
-        pass
+    def print_poems(self):
+        for poem in self.poems:
+            print(poem.getText())
+
+
+
         
-
-    def get_fittest_half(self, generation):
-        sorted_poems = sorted(generation,key = lambda x: x.get_fitness())
-        return sorted_poems[int(len(generation)/2)]
-
-    def genetic_algo(self):
-        next_generation = []
-        fitnesses =[]
-        sum_fitness = 0
-        for _ in range(len(self.poems)):
-            for poem in self.poems():
-                fitness = poem.getFitness()
-                fitnesses.append(fitness)
-                sum_fitness +=  fitness
-            fitnesses = fitnesses / sum_fitness
-            poem1,poem2 = np.random.choice(self.poems,p = fitnesses,size = 2,
-            replace = False)
-            new_poem = self.crossover(poem1,poem2)
-            new_poem.mutate()
-            next_generation.append(new_poem)
-
-        self.poems = (self.get_fittest_half(self.poems) + \
-             self.get_fittest_half(next_generation))
-        
-     
-         """
 def main():
+    # generations = int(input(
+    # "How many generations would you like to run this algorithm for? "))
+    # song = str(input(
+    # "What song do you want to base your poem off of? "))
+    # artist = str(input(
+    # "Which artist is that song made by?"))
     runner = genetic(0)
     runner.create_poems()
     runner.genetic_algo()
+    runner.print_poems()
     
 
 

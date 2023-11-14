@@ -10,36 +10,35 @@ class Line:
         self.nlp = spacy.load("en_core_web_md")
         self.line = self.nlp(line)
         self.worder = WordManager()
-        self.lyricer = LyricManager(lyric)
+        self.lyricer = LyricManager()
 
     def getText(self):
         return self.line.text
     
     def mutate(self):
-        mutation = np.random.randint(0,3)
-        print(mutation)
+        mutation = np.random.choice([0,1])
         match mutation:
             case 0: #change rhyme word to closer to theme
                 self.change_rhyme_word()
-                print("I am changing a rhyme word")
+                #print("I am changing a rhyme word")
 
             case 1: #change noun to noun from lyric list
                 self.swap_noun()
-                print("I am changing a noun")
+               # print("I am changing a noun")
 
-            case 2: #change verb to synoynm
-                print ("I am changing a noun")
-
-        return self.line
+            
+        
+        return self
             
     def change_rhyme_word(self):
+        print("changing rhyme word")
         end_word =  self.line[-1].text
         scores = []
         rhyme_words = self.worder.find_rhyme_word(end_word)
         if len(rhyme_words) == 0:
+            print("no ryhmes for "+ end_word)
             return end_word
         scores = rhyme_words.values()
-        print(scores)
         total = sum(scores)
         p = [value / total for value in scores]
         new_word =  np.random.choice(list(rhyme_words.keys()), p =p)
@@ -47,9 +46,11 @@ class Line:
         return new_word
     
     def replace_word(self, index, new_word):
+        print("swapping " + new_word + " with " + self.line[index].text)
         new_line =  self.line[:index].text + " " + new_word + " " + self.line[index + 1:].text
         self.line = self.nlp(new_line)
         return self.line.text
+
     def min_max(self, array):
         min_value = min(array)
         if min_value < 0:
@@ -61,6 +62,7 @@ class Line:
 
 
     def swap_noun(self):
+        
         noun_dict = self.lyricer.get_noun_dict()
         old_nouns = []
         for token in self.line:
@@ -84,9 +86,8 @@ class Line:
 
 def main():
     line = Line("Hi my name is Cairo")
-    line.change_rhyme_word()
-    line.swap_noun()
-    print (line.getText())
+    print(line.mutate().getText())
+  
 
 
 if __name__ == "__main__":

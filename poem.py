@@ -6,11 +6,13 @@ from lyric_manager import LyricManager
 
 class Poem:
     def __init__(self,lines,song=LyricManager()):
+        
         self.lyric = song
-        self.rhyme = 0 # set rhyme scheme here
+        self.rhyme = "AABBA" # set rhyme scheme here
         self.lines = []
         for line in lines:
-            self.lines.append(Line(line,self.lyric))
+            stripped_line = line.strip()
+            self.lines.append(Line(stripped_line,self.lyric))
 
     def getFitness(self):
         return np.random.rand()
@@ -24,10 +26,22 @@ class Poem:
     def mutate(self):
         lines = self.lines
         choice = np.random.randint(1,4) #choose between mutating 1 and 3 lines
-        print(str(choice) + "lines")
         mutated_lines = np.random.choice(lines, size = choice, replace = False)
         for line in mutated_lines:
+            print(line.getText())
             line = line.mutate()
+            print(line.getText())
+        return self
+    def getText(self):
+        poem = []
+        for line in self.lines:
+            poem.append(line.getText())
+        return poem
+
+
+
+    
+
 
 
 

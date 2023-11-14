@@ -6,7 +6,7 @@ class LyricManager:
     def __init__(self, lyrics = SongManager().get_song_lyrics()):
         self.nlp = spacy.load('en_core_web_sm') 
         self.lyrics = lyrics
-        self.nlpsong = self.nlp(self.lyrics)
+        self.nlpsong = self.nlp(lyrics)
         self.noundict = self.get_nouns()
 
 
@@ -26,7 +26,7 @@ class LyricManager:
         
     def get_noun_dict(self):
         return self.noundict
-        
+
     def get_song_lyrics(self):
         return self.lyrics
 
