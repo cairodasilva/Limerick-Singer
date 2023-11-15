@@ -37,6 +37,7 @@ def main():
     #print(genius.remove_stop_words())
     genius.get_nouns()
     print(genius.get_noun_dict())
+    print(genius.lyrics)
    
 
     

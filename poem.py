@@ -2,14 +2,16 @@
 import numpy as np
 from line import Line
 from lyric_manager import LyricManager
+from word_manager import WordManager
 
 
 class Poem:
     def __init__(self,lines,song = LyricManager()):
         
         self.lyric = song
-        self.rhyme = "AABBA" # set rhyme scheme here
+        self.rhyme = "AABBAA" # set rhyme scheme here
         self.lines = []
+        self.worder = WordManager()
         for line in lines:
             stripped_line = line.strip()
             if len(stripped_line) > 0:
@@ -38,8 +40,19 @@ class Poem:
         for line in self.lines:
             poem.append(line.getText())
         return poem
-
-
+    def normalize_rhymes(self):
+        index = 0
+        rhyme_dict =  {}
+        for line in self.lines:
+            end_word = line.get_end_word()
+            rhyme_scheme = self.rhyme[index]
+            if rhyme_scheme not in rhyme_dict:
+                rhyme_dict[rhyme_scheme] = end_word
+            else: 
+                word1 = rhyme_dict[rhyme_scheme]
+                if not self.worder.rhyme_test(word1,end_word):
+                    line.change_rhyme_word(word1)
+            index += 1
 
     
 

@@ -43,6 +43,7 @@ class genetic:
         section2 = second_poem.getLines()[pivot:]
         
         new_poem = Poem(section1 + section2,self.song)
+        new_poem.normalize_rhymes()
         return new_poem
 
 
@@ -60,6 +61,7 @@ class genetic:
             poem1,poem2 = np.random.choice(self.poems,p = p,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
+            print("starting mutations")
             new_poem.mutate()
             next_generation.append(new_poem)
         self.poems = next_generation

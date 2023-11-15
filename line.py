@@ -1,4 +1,4 @@
-
+import pronouncing
 import spacy
 import numpy as np
 from word_manager import WordManager
@@ -30,9 +30,10 @@ class Line:
         
         return self
             
-    def change_rhyme_word(self):
+    def change_rhyme_word(self,end_word = -1):
         print("changing rhyme word")
-        end_word =  self.line[-1].text
+        if end_word == -1:
+            end_word =  self.line[-1].text
         scores = []
         rhyme_words = self.worder.find_rhyme_word(end_word)
         if len(rhyme_words) == 0:
@@ -59,7 +60,8 @@ class Line:
             return scaled_array
         return array
         
-
+    def get_end_word(self):
+        return self.line[-1].text
 
     def swap_noun(self):
         
@@ -67,6 +69,10 @@ class Line:
         old_nouns = []
         for token in self.line:
             if token.pos_ =="NOUN" and token.i < len(self.line) - 1:
+
+                print(token.pos_)
+                print(token.text)
+                print(token.lemma)
                 old_nouns.append(token.i)
         if len(old_nouns) > 0:
             replace_index = np.random.choice(old_nouns)
@@ -82,10 +88,12 @@ class Line:
             new_noun = np.random.choice(list(noun_dict.keys()),p = p)
             self.replace_word(replace_index,new_noun)
         return self.line.text
+  
+
 
 
 def main():
-    line = Line("Hi my name is Cairo")
+    line = Line("and my house its burning down")
     print(line.mutate().getText())
   
 
