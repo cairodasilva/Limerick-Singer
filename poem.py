@@ -1,21 +1,23 @@
 
 import numpy as np
 from line import Line
-from lyric_manager import LyricManager
+
 from word_manager import WordManager
+from nlpmanager import NlpManager
 
 
 class Poem:
-    def __init__(self,lines,song = LyricManager()):
+    def __init__(self,lines,song):
         
         self.lyric = song
         self.rhyme = "AABBAA" # set rhyme scheme here
         self.lines = []
         self.worder = WordManager()
+        self.nlp = NlpManager(self.lyric)
         for line in lines:
             stripped_line = line.strip()
             if len(stripped_line) > 0:
-                self.lines.append(Line(stripped_line,self.lyric))
+                self.lines.append(Line(stripped_line,self.lyric,self.nlp))
 
     def getFitness(self):
         return np.random.rand()

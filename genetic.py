@@ -12,7 +12,7 @@ class genetic:
         self.inspiring_set = []
         self.poems = []
         print("initialing song manager")
-        self.song = SongManager().make_song_lyrics()
+        self.song = SongManager("kanye west","all of the lights").make_song_lyrics()
     
     def create_poems(self):
         dir = "./inspiring_set"
