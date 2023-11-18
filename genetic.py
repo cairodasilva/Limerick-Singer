@@ -3,23 +3,23 @@ import requests
 from poem import Poem
 import numpy as np
 import os
-print ("cairo cairo cairo")
 from song_manager import SongManager
+from nlpmanager import NlpManager
 
 class genetic:
     def __init__(self, iterations=0):
         self.iterations = iterations
         self.inspiring_set = []
         self.poems = []
-        print("initialing song manager")
         self.song = SongManager("kanye west","all of the lights").make_song_lyrics()
+        self.nlp = NlpManager(self.song)
     
     def create_poems(self):
         dir = "./inspiring_set"
         for file in os.listdir(dir):
             with open(dir + "/" + file, "r") as f:
                 poem_lines = f.readlines()
-                new_poem = Poem(poem_lines,self.song)
+                new_poem = Poem(poem_lines,self.song,self.nlp)
                 self.poems.append(new_poem)
     def create_inspiring_set(self):
         url = "https://poetrydb.org/author/Algernon%20Charles%20Swinburne"
@@ -42,7 +42,7 @@ class genetic:
      
         section2 = second_poem.getLines()[pivot:]
         
-        new_poem = Poem(section1 + section2,self.song)
+        new_poem = Poem(section1 + section2,self.song,self.nlp)
         new_poem.normalize_rhymes()
         return new_poem
 
@@ -51,19 +51,21 @@ class genetic:
         next_generation = []
         fitnesses =[]
         sum_fitness = 0
-        for _ in range(len(self.poems)-1):
-            for poem in self.poems:
+        for poem in self.poems:
                 fitness = poem.getFitness()
                 fitnesses.append(fitness)
                 sum_fitness +=  fitness
-            fitnessnp = np.array(fitnesses)
-            p = fitnessnp / sum_fitness
+        fitnessnp = np.array(fitnesses)
+        p = fitnessnp / sum_fitness
+        for _ in range(len(self.poems)-1):
             poem1,poem2 = np.random.choice(self.poems,p = p,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
             print("starting mutations")
             new_poem.mutate()
             next_generation.append(new_poem)
+        #get fittest half of self.poems and fittest half of next generation 
+        #then make that the self.poems
         self.poems = next_generation
 
     def genetic_algo_runner(self):
@@ -91,10 +93,5 @@ def main():
     runner.print_poems()
     
 
-
-
-
 if __name__ == "__main__":
     main()
-
-
