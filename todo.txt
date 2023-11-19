@@ -1,3 +1,6 @@
+1. inspiring set
+2. tune fitness
+
 
 input 
         --> spotify valence - to get emotion and then match that with 
@@ -32,4 +35,3 @@ fitness
 
 things to figure out 
     -> song doesnt exist and cant get lyrics
-    -> replacing words and making sure they can make sense

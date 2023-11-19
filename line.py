@@ -15,21 +15,25 @@ class Line:
     def getText(self):
         return ' '.join(self.line)
     
-    def mutate(self):
-        mutation = np.random.choice([1,1])
+    def mutate(self,array = [0,1,2]):
+        mutation = np.random.choice(array)
         match mutation:
             case 0: #change rhyme word to closer to theme
                 self.change_rhyme_word()
-                #print("I am changing a rhyme word")
+                print("I am changing a rhyme word")
 
             case 1: #change noun to noun from lyric list
                 self.swap_noun()
-                print("I am changing a noun")
+                print("noun")
+            case 2:
+                self.swap_verb()
+                print("verb")
+    
 
         return self
             
     def change_rhyme_word(self,end_word = -1):
-        print("changing rhyme word")
+       
         if end_word == -1:
             end_word =  self.line[-1]
         scores = []
@@ -45,7 +49,6 @@ class Line:
         return new_word
     
     def replace_word(self, index, new_word):
-        print("swapping " + new_word + " with " + self.line[index])
         new_line =  self.line[:index]  + [new_word]  + self.line[index + 1:]
         self.line = new_line
         return self.line
@@ -64,14 +67,22 @@ class Line:
     def swap_noun(self):
         new_noun_tuple = self.nlp.new_noun(self.getText())
         if new_noun_tuple != -1:
-            print(new_noun_tuple)
             noun = new_noun_tuple[0]
             index = new_noun_tuple[1]
             self.replace_word(index,noun)
         else:
-            print("no nouns in the line")
+            self.mutate([0,2])
         return self.line
-  
+
+    def swap_verb(self):
+        new_verb_tuple = self.nlp.new_verb(self.getText())
+        if new_verb_tuple != -1:
+            verb = new_verb_tuple[0]
+            index = new_verb_tuple[1]
+            self.replace_word(index,verb)
+        else:
+            self.mutate([0,1])
+        return self.line
 
 
 

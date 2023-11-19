@@ -4,11 +4,12 @@ import numpy as np
 from line import Line
 from word_manager import WordManager
 from nlpmanager import NlpManager
+from spotify import Spotify
 
 
 class Poem:
-    def __init__(self,lines,song,nlpmanager):
-        
+    def __init__(self,lines,song,nlpmanager,valence):
+        self.valence = valence
         self.lyric = song
         self.rhyme = "AABBAA" # set rhyme scheme here
         self.lines = []
@@ -19,10 +20,7 @@ class Poem:
             if len(stripped_line) > 0:
                 self.lines.append(Line(stripped_line,self.lyric,self.nlp))
 
-    def getFitness(self):
-        self.num_syllables()
-        self.get_meter()
-        return np.random.rand()
+  
 
     def getLines(self):
         lines = []
@@ -34,10 +32,8 @@ class Poem:
         lines = self.lines
         choice = np.random.randint(1,4) #choose between mutating 1 and 3 lines
         mutated_lines = np.random.choice(lines, size = choice, replace = False)
-        for line in mutated_lines:
-            print(line.getText())
+        for line in mutated_lines: 
             line = line.mutate()
-            print(line.getText())
         return self
     def getText(self):
         poem = []
@@ -58,6 +54,25 @@ class Poem:
                     line.change_rhyme_word(word1)
             index += 1
     #FITNESS STARTS HERE
+
+    def getFitness(self):
+       
+        meter_coeff = 1
+        similar_coeff = 1
+        syllables_coeff = 1
+        sentiment_coeff = 1
+
+        meter = (self.get_meter()) #want lowest
+        similar = 1 - (self.get_similarity()) #want highest can do 1- ans
+        syllables = self.num_syllables() #want to lowest
+        sentiment =  self.get_sentiment() #want lowest
+        print ("meter fitness= " , meter_coeff*meter)
+        print ("similar fitness= " , similar_coeff*similar)
+        print ("sentiment fitness= " , sentiment_coeff*sentiment)
+        print ("syllables fitness= " , syllables_coeff*syllables)
+        return (meter_coeff*meter + similar_coeff*similar
+         + sentiment_coeff*sentiment + syllables_coeff*syllables)
+
     def num_syllables(self):
         #gets the number of syllables in each line and then gives a number 
         # based on the average number of syllables it's off on each line
@@ -72,7 +87,6 @@ class Poem:
         if len(limerick_syllables) >= len(poem_syl):
             for i in range(len(poem_syl)):
                 diff = abs(limerick_syllables[i]-poem_syl[i])
-                print(diff)
                 syl_sum += diff
                 index+=1
             for syl in limerick_syllables[index:]:
@@ -93,14 +107,15 @@ class Poem:
         for line in self.lines:
             line_meter = []
             texts = line.getText().split()
+            
             for word in texts:
-                if word == 'untamed':
+                phone = (pronouncing.phones_for_word(word))
+                if phone == []:
                     line_meter.append(10)
                 else:
                     line_meter.append(pronouncing.stresses(pronouncing.phones_for_word(word)[0]))
             if index < len(meter_scheme):
                 scheme_arr = [int(char) for char in meter_scheme[index]]
-                print(scheme_arr)
                 if len(line_meter) >= len(scheme_arr):
                     for i in range(len(scheme_arr)):
                         total_sum += line_meter[i] != scheme_arr[i]
@@ -112,30 +127,30 @@ class Poem:
             else: 
                 for meter in line_meter:
                     total_sum += int(meter)
-        print(total_sum)
-
-            
+        return(total_sum)
+        
 
     def get_similarity(self):
         #takes out stop words from both poem and song and then gets the 
         # similarity between the two
-        pass
+        song = self.lyric
+        poem = " ".join(self.getText())
+        sim =  self.nlp.poem_song_similarity(poem,song)
+        return sim
+        
     def get_sentiment(self):
-        #gets sentiment from poem and valence from song and tells difference 
-        # - puts them on the same scale
-        pass
-    def get_noun_chunk_popularity(self):
-        #gets the popularity of every noun chunk
-        pass
+        valence = self.valence
+        poem = " ".join(self.getText())
+        sentiment = self.nlp.get_sentiment(poem)
+        sentiment_scaled = (sentiment + 1)/2
+        return abs(valence-sentiment_scaled)
+        
+
     def get_num_lines(self):
         return len(self.lines)
    
         
-    def syl(self):
-        for line in self.lines:
-            words = line.getText().split()
-            syllable_count = sum(syllables.estimate(word) for word in words)
-            print (syllable_count)
+   
 
 
 

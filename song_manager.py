@@ -10,6 +10,7 @@ class SongManager:
 
     def make_song_lyrics(self):
         self.lyrics = self.genius.search_song(self.artist, self.title).lyrics
+
         return self.lyrics
 
     def get_song_lyrics(self):
@@ -17,12 +18,6 @@ class SongManager:
             return self.make_song_lyrics()
         return self.lyrics
  
-        
-def main():
-    print("songgers")
 
-    
-if __name__ == "__main__":
-    main()
 
     

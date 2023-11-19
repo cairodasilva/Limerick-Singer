@@ -5,21 +5,30 @@ import numpy as np
 import os
 from song_manager import SongManager
 from nlpmanager import NlpManager
+from spotify import Spotify
 
 class genetic:
-    def __init__(self, iterations=0):
+    def __init__(self, iterations = 4, name = '', artist=''):
         self.iterations = iterations
         self.inspiring_set = []
         self.poems = []
-        self.song = SongManager("kanye west","all of the lights").make_song_lyrics()
+        if name != '' or artist != '':
+            self.name = name
+            self.artist = artist
+        else:
+            self.name = "all of the lights"
+            self.artist = "kanye west"
+        self.song = SongManager(self.artist,self.name).make_song_lyrics()
+        self.spot = Spotify(self.name,self.artist)
         self.nlp = NlpManager(self.song)
+        self.valence = self.spot.get_valence()
     
     def create_poems(self):
         dir = "./inspiring_set"
         for file in os.listdir(dir):
             with open(dir + "/" + file, "r") as f:
                 poem_lines = f.readlines()
-                new_poem = Poem(poem_lines,self.song,self.nlp)
+                new_poem = Poem(poem_lines,self.song,self.nlp,self.valence)
                 self.poems.append(new_poem)
     def create_inspiring_set(self):
         url = "https://poetrydb.org/author/Algernon%20Charles%20Swinburne"
@@ -42,8 +51,9 @@ class genetic:
      
         section2 = second_poem.getLines()[pivot:]
         
-        new_poem = Poem(section1 + section2,self.song,self.nlp)
+        new_poem = Poem(section1 + section2,self.song,self.nlp,self.valence)
         new_poem.normalize_rhymes()
+        print(new_poem.getText())
         return new_poem
 
 
@@ -64,9 +74,13 @@ class genetic:
             print("starting mutations")
             new_poem.mutate()
             next_generation.append(new_poem)
-        #get fittest half of self.poems and fittest half of next generation 
-        #then make that the self.poems
-        self.poems = next_generation
+        old_gen = self.fittest_half(self.poems)
+        new_gen = self.fittest_half(next_generation)
+        self.poems = new_gen + old_gen
+
+    def fittest_half(self,generation):
+        sorted_poems = sorted(generation, key = lambda x : x.getFitness())
+        return sorted_poems[:int(len(generation)/2)]
 
     def genetic_algo_runner(self):
         for i in range(self.iterations):
@@ -80,16 +94,16 @@ class genetic:
 
         
 def main():
-    # generations = int(input(
-    # "How many generations would you like to run this algorithm for? "))
-    # song = str(input(
-    # "What song do you want to base your poem off of? "))
-    # artist = str(input(
-    # "Which artist is that song made by?"))
+    generations = int(input(
+    "How many generations would you like to run this algorithm for? "))
+    name = str(input(
+    "What song do you want to base your poem off of? "))
+    artist = str(input(
+    "Which artist is that song made by?"))
     print("song manager")
-    runner = genetic(0)
+    runner = genetic(generations,name,artist)   
     runner.create_poems()
-    runner.genetic_algo()
+    runner.genetic_algo_runner()
     runner.print_poems()
     
 
