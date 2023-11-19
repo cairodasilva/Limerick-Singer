@@ -114,19 +114,24 @@ class Poem:
                     line_meter.append(10)
                 else:
                     line_meter.append(pronouncing.stresses(pronouncing.phones_for_word(word)[0]))
+        
             if index < len(meter_scheme):
                 scheme_arr = [int(char) for char in meter_scheme[index]]
-                if len(line_meter) >= len(scheme_arr):
+                expanded_line = [int(digit) for number in line_meter for digit in str(number)]
+                print(scheme_arr)
+                print(expanded_line)
+                if len(expanded_line) >= len(scheme_arr):
                     for i in range(len(scheme_arr)):
-                        total_sum += line_meter[i] != scheme_arr[i]
+                        print (expanded_line[i] != scheme_arr[i])
+                        total_sum += expanded_line[i] != scheme_arr[i]
+                        print(total_sum)
                 else:
+                    print("we got here")
                     for i in range(len(line_meter)):
                         total_sum += line_meter[i] != scheme_arr[i]
-                total_sum += abs(len(line_meter)- len(scheme_arr))
+                total_sum += abs(len(expanded_line)- len(scheme_arr))
                 index += 1
-            else: 
-                for meter in line_meter:
-                    total_sum += int(meter)
+            
         return(total_sum)
         
 
