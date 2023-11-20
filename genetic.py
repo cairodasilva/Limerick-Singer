@@ -65,6 +65,7 @@ class genetic:
             new_poem = self.crossover(poem1,poem2)
             print("starting mutations")
             new_poem.mutate()
+            print("done mutating")
             next_generation.append(new_poem)
         old_gen = self.fittest_half(self.poems)
         new_gen = self.fittest_half(next_generation)

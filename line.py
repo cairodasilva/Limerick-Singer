@@ -15,7 +15,7 @@ class Line:
     def getText(self):
         return ' '.join(self.line)
     
-    def mutate(self,array = [0,1,2]):
+    def mutate(self,array = [0,1,2,1,2]):
         mutation = np.random.choice(array)
         match mutation:
             case 0: #change rhyme word to closer to theme

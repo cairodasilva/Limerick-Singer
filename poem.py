@@ -11,7 +11,7 @@ class Poem:
     def __init__(self,lines,song,nlpmanager,valence):
         self.valence = valence
         self.lyric = song
-        self.rhyme = "AABBAA" # set rhyme scheme here
+        self.rhyme = "AABBA" # set rhyme scheme here
         self.lines = []
         self.worder = WordManager()
         self.nlp = nlpmanager
@@ -19,7 +19,7 @@ class Poem:
             stripped_line = line.strip()
             if len(stripped_line) > 0:
                 self.lines.append(Line(stripped_line,self.lyric,self.nlp))
-
+        self.fitness = -1
   
 
     def getLines(self):
@@ -34,6 +34,7 @@ class Poem:
         mutated_lines = np.random.choice(lines, size = choice, replace = False)
         for line in mutated_lines: 
             line = line.mutate()
+        self.updateFitness()
         return self
     def getText(self):
         poem = []
@@ -54,12 +55,17 @@ class Poem:
                     line.change_rhyme_word(word1)
             index += 1
     #FITNESS STARTS HERE
-
     def getFitness(self):
+        if self.fitness != -1:
+            return self.fitness
+        return self.updateFitness()
+
+
+    def updateFitness(self):
        
-        meter_coeff = 1/30
-        similar_coeff = 1
-        syllables_coeff = 1/25
+        meter_coeff = 1/100
+        similar_coeff = 2
+        syllables_coeff = 1/50
         sentiment_coeff = 1
 
         meter = (self.get_meter()) #want lowest
