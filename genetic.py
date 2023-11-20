@@ -30,14 +30,7 @@ class genetic:
                 poem_lines = f.readlines()
                 new_poem = Poem(poem_lines,self.song,self.nlp,self.valence)
                 self.poems.append(new_poem)
-    def create_inspiring_set(self):
-        url = "https://poetrydb.org/author/Algernon%20Charles%20Swinburne"
-        response = requests.get(url)
-        if response.status_code == 200:
-            data = response.json()
-            print(data)
-        else:
-            print(f"Error: {response.status_code}")
+   
 
     def crossover(self,poem1,poem2):
         num_lines = 6
@@ -53,7 +46,6 @@ class genetic:
         
         new_poem = Poem(section1 + section2,self.song,self.nlp,self.valence)
         new_poem.normalize_rhymes()
-        print(new_poem.getText())
         return new_poem
 
 
@@ -67,7 +59,7 @@ class genetic:
                 sum_fitness +=  fitness
         fitnessnp = np.array(fitnesses)
         p = fitnessnp / sum_fitness
-        for _ in range(len(self.poems)-1):
+        for _ in range(len(self.poems)):
             poem1,poem2 = np.random.choice(self.poems,p = p,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
@@ -89,7 +81,10 @@ class genetic:
     def print_poems(self):
         for poem in self.poems:
             print(poem.getText())
-
+    def get_fittest(self):
+        sorted_poems = sorted(self.poems, key = lambda x : x.getFitness())
+        print (sorted_poems[0].getText())
+        return sorted_poems[0]
 
 
         
@@ -104,7 +99,8 @@ def main():
     runner = genetic(generations,name,artist)   
     runner.create_poems()
     runner.genetic_algo_runner()
-    runner.print_poems()
+    runner.get_fittest()
+    
     
 
 if __name__ == "__main__":

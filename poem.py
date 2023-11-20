@@ -30,7 +30,7 @@ class Poem:
 
     def mutate(self):
         lines = self.lines
-        choice = np.random.randint(1,4) #choose between mutating 1 and 3 lines
+        choice = np.random.choice([2,3,4,5]) #choose between mutating 1 and 3 lines
         mutated_lines = np.random.choice(lines, size = choice, replace = False)
         for line in mutated_lines: 
             line = line.mutate()
@@ -57,19 +57,21 @@ class Poem:
 
     def getFitness(self):
        
-        meter_coeff = 1
+        meter_coeff = 1/30
         similar_coeff = 1
-        syllables_coeff = 1
+        syllables_coeff = 1/25
         sentiment_coeff = 1
 
         meter = (self.get_meter()) #want lowest
         similar = 1 - (self.get_similarity()) #want highest can do 1- ans
         syllables = self.num_syllables() #want to lowest
         sentiment =  self.get_sentiment() #want lowest
-        print ("meter fitness= " , meter_coeff*meter)
-        print ("similar fitness= " , similar_coeff*similar)
-        print ("sentiment fitness= " , sentiment_coeff*sentiment)
-        print ("syllables fitness= " , syllables_coeff*syllables)
+        # print ("meter fitness= " , meter_coeff*meter)
+        # print ("similar fitness= " , similar_coeff*similar)
+        # print ("sentiment fitness= " , sentiment_coeff*sentiment)
+        # print ("syllables fitness= " , syllables_coeff*syllables)
+        print ("total fitness = ",meter_coeff*meter + similar_coeff*similar
+         + sentiment_coeff*sentiment + syllables_coeff*syllables)
         return (meter_coeff*meter + similar_coeff*similar
          + sentiment_coeff*sentiment + syllables_coeff*syllables)
 
@@ -118,15 +120,11 @@ class Poem:
             if index < len(meter_scheme):
                 scheme_arr = [int(char) for char in meter_scheme[index]]
                 expanded_line = [int(digit) for number in line_meter for digit in str(number)]
-                print(scheme_arr)
-                print(expanded_line)
                 if len(expanded_line) >= len(scheme_arr):
                     for i in range(len(scheme_arr)):
-                        print (expanded_line[i] != scheme_arr[i])
                         total_sum += expanded_line[i] != scheme_arr[i]
-                        print(total_sum)
                 else:
-                    print("we got here")
+                  
                     for i in range(len(line_meter)):
                         total_sum += line_meter[i] != scheme_arr[i]
                 total_sum += abs(len(expanded_line)- len(scheme_arr))

@@ -20,14 +20,13 @@ class Line:
         match mutation:
             case 0: #change rhyme word to closer to theme
                 self.change_rhyme_word()
-                print("I am changing a rhyme word")
-
+              
             case 1: #change noun to noun from lyric list
                 self.swap_noun()
-                print("noun")
+              
             case 2:
                 self.swap_verb()
-                print("verb")
+              
     
 
         return self
@@ -49,6 +48,7 @@ class Line:
         return new_word
     
     def replace_word(self, index, new_word):
+        #print("swapping ", self.line[index], " with ", new_word)
         new_line =  self.line[:index]  + [new_word]  + self.line[index + 1:]
         self.line = new_line
         return self.line

@@ -22,7 +22,7 @@ class NlpManager:
         nlptext = self.nlp(text)
         old_nouns =[]
         for token in nlptext:
-            if token.pos_ =="NOUN" and token.i < len(nlptext) - 1:
+            if token.pos_ =="NOUN":
                 old_nouns.append(token.i)
         if len(old_nouns) > 0:
             replace_index = np.random.choice(old_nouns)
@@ -69,7 +69,7 @@ class NlpManager:
         scores = []
         nlptext = self.nlp(text)
         for token in nlptext:
-            if token.pos_ =="VERB" and token.i < len(nlptext)-1:
+            if token.pos_ =="VERB":
                 old_verbs.append(token.i)
         if len(old_verbs) > 0:
             replace_index = np.random.choice(old_verbs)
@@ -124,6 +124,6 @@ class NlpManager:
 
 def main():
     nlp = NlpManager("Oh, I'm sorry, sorry that you love me (Ha-ha-ha-ha-ha-ha) Changed my mind up like it's origami Oh, I'm sorry, sorry that you love me (Ha-ha-ha-ha-ha-ha) Changed my mind up like it's origami")
-    print(nlp.new_verb("cairo watched too many movies"))
+    print(nlp.new_verb("Except when he takes a cold clip"))
 if __name__ == "__main__":
     main()
