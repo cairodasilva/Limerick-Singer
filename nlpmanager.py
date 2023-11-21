@@ -3,6 +3,7 @@ import numpy as np
 from word_manager import WordManager
 from textblob import TextBlob
 from collections import Counter
+import pyttsx3
 
 
 
@@ -16,7 +17,7 @@ class NlpManager:
         self.noun_dict = self.get_nouns()
         self.verb_dict = self.get_verbs()
         self.stop_words = spacy.lang.en.stop_words.STOP_WORDS 
-            
+        
     def new_noun(self,text):
         noun_dict = self.noun_dict
         nlptext = self.nlp(text)
@@ -90,9 +91,13 @@ class NlpManager:
             return -1
                 
 
+    
 
 
 
+
+
+        
 
 
     def get_sentiment(self,text):
@@ -113,6 +118,10 @@ class NlpManager:
         doc = self.nlp(text) 
         filtered_tokens = [token for token in doc if not token.is_stop] 
         return ' '.join([token for token in filtered_tokens])
+    def say(self):
+        engine = pyttsx3.init()
+        engine.say("Hi, Cairo")
+        engine.runAndWait()
 
     def poem_song_similarity(self,poem,song):
         nlppoem = self.nlp(poem)
@@ -124,6 +133,8 @@ class NlpManager:
 
 def main():
     nlp = NlpManager("Oh, I'm sorry, sorry that you love me (Ha-ha-ha-ha-ha-ha) Changed my mind up like it's origami Oh, I'm sorry, sorry that you love me (Ha-ha-ha-ha-ha-ha) Changed my mind up like it's origami")
-    print(nlp.new_verb("Except when he takes a cold clip"))
+    print(nlp.new_noun("Said Humping is one thing I do know"))
+    import pyttsx3
+    
 if __name__ == "__main__":
     main()

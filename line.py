@@ -42,6 +42,8 @@ class Line:
             return end_word
         scores = rhyme_words.values()
         total = sum(scores)
+        if(total == 0):
+            return end_word
         p = [value / total for value in scores]
         new_word =  np.random.choice(list(rhyme_words.keys()), p =p)
         self.replace_word(len(self.line)-1,new_word)

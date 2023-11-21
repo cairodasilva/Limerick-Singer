@@ -33,7 +33,9 @@ class Poem:
         choice = np.random.choice([2,3,4,5]) #choose between mutating 1 and 3 lines
         mutated_lines = np.random.choice(lines, size = choice, replace = False)
         for line in mutated_lines: 
-            line = line.mutate()
+            mutations = np.random.randint(3) + 1
+            for _ in range (mutations):
+                line = line.mutate()
         self.updateFitness()
         return self
     def getText(self):
@@ -65,46 +67,21 @@ class Poem:
        
         meter_coeff = 1/100
         similar_coeff = 2
-        syllables_coeff = 1/50
         sentiment_coeff = 1
 
         meter = (self.get_meter()) #want lowest
         similar = 1 - (self.get_similarity()) #want highest can do 1- ans
-        syllables = self.num_syllables() #want to lowest
         sentiment =  self.get_sentiment() #want lowest
         # print ("meter fitness= " , meter_coeff*meter)
         # print ("similar fitness= " , similar_coeff*similar)
         # print ("sentiment fitness= " , sentiment_coeff*sentiment)
         # print ("syllables fitness= " , syllables_coeff*syllables)
         print ("total fitness = ",meter_coeff*meter + similar_coeff*similar
-         + sentiment_coeff*sentiment + syllables_coeff*syllables)
+         + sentiment_coeff*sentiment )
         return (meter_coeff*meter + similar_coeff*similar
-         + sentiment_coeff*sentiment + syllables_coeff*syllables)
+         + sentiment_coeff*sentiment )
 
-    def num_syllables(self):
-        #gets the number of syllables in each line and then gives a number 
-        # based on the average number of syllables it's off on each line
-        limerick_syllables = [7,7,5,5,7]
-        poem_syl = []
-        syl_sum = 0
-        index = 0
-        for line in self.lines:
-            words = line.getText().split()
-            syllable_count = sum(syllables.estimate(word) for word in words)
-            poem_syl.append(syllable_count)
-        if len(limerick_syllables) >= len(poem_syl):
-            for i in range(len(poem_syl)):
-                diff = abs(limerick_syllables[i]-poem_syl[i])
-                syl_sum += diff
-                index+=1
-            for syl in limerick_syllables[index:]:
-                syl_sum += syl
-        else:
-            for i in range(len(limerick_syllables)):
-                diff = abs(limerick_syllables[i]-poem_syl[i])
-                syl_sum += diff
-                index += 1
-        return syl_sum
+
 
                 
         

@@ -1,12 +1,12 @@
 from line import Line
-import requests
+import datetime
 from poem import Poem
 import numpy as np
 import os
 from song_manager import SongManager
 from nlpmanager import NlpManager
 from spotify import Spotify
-
+import pyttsx3
 class genetic:
     def __init__(self, iterations = 4, name = '', artist=''):
         self.iterations = iterations
@@ -16,7 +16,7 @@ class genetic:
             self.name = name
             self.artist = artist
         else:
-            self.name = "all of the lights"
+            self.name = "all falls down"
             self.artist = "kanye west"
         self.song = SongManager(self.artist,self.name).make_song_lyrics()
         self.spot = Spotify(self.name,self.artist)
@@ -63,9 +63,8 @@ class genetic:
             poem1,poem2 = np.random.choice(self.poems,p = p,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
-            print("starting mutations")
             new_poem.mutate()
-            print("done mutating")
+            new_poem.normalize_rhymes()
             next_generation.append(new_poem)
         old_gen = self.fittest_half(self.poems)
         new_gen = self.fittest_half(next_generation)
@@ -84,11 +83,37 @@ class genetic:
             print(poem.getText())
     def get_fittest(self):
         sorted_poems = sorted(self.poems, key = lambda x : x.getFitness())
-        print (sorted_poems[0].getText())
-        return sorted_poems[0]
-
-
-        
+        top_poem =  (sorted_poems[0].getText())
+        fitness = sorted_poems[0].getFitness()
+        split_poem  = ('\n'.join(top_poem))
+        print (split_poem)
+        timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+        filepath = f"./previous_poems/poem_{timestamp}.txt"
+        with open(filepath, "w") as f:
+            f.write(str(split_poem) + '\n' + '\n' )
+            f.write(f"Fitness = {fitness}" + '\n' + '\n')
+            f.write(f"song  = {self.name} by {self.artist}" + '\n' + '\n')
+            f.write(f"Generations = {self.iterations}")
+        return top_poem
+    def say(self,text):
+        engine = pyttsx3.init()  
+        engine.setProperty('rate', 150)  # setting up new voice rate
+        engine.setProperty('volume', 0.8) 
+        for item in text:
+            engine.say(item)
+            engine.runAndWait()
+    
+    def reperform_poem(self, file):
+        dir = f"./previous_poems/{file}"
+        with open(dir , "r") as f:
+            poem_lines = f.readlines()
+        engine = pyttsx3.init()  
+        engine.setProperty('rate', 150)  # setting up new voice rate
+        engine.setProperty('volume', 0.8) 
+        for line in poem_lines:
+            engine.say(line)
+            engine.runAndWait()
+        return
 def main():
     generations = int(input(
     "How many generations would you like to run this algorithm for? "))
@@ -96,11 +121,13 @@ def main():
     "What song do you want to base your poem off of? "))
     artist = str(input(
     "Which artist is that song made by?"))
-    print("song manager")
     runner = genetic(generations,name,artist)   
     runner.create_poems()
     runner.genetic_algo_runner()
-    runner.get_fittest()
+    poem = runner.get_fittest()
+    runner.say(poem)
+    #runner.reperform_poem("poem_20231120_203758.txt")
+    
     
     
 
