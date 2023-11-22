@@ -16,7 +16,8 @@ class Line:
         return ' '.join(self.line)
     
     def mutate(self,array = [0,1,2,1,2,1,2]):
-        """mutates the line with a higher probability of mutating nouns and verbs"""
+        """mutates the line with a higher probability of mutating nouns 
+        and verbs"""
         mutation = np.random.choice(array)
         match mutation:
             case 0: #change rhyme word to closer to theme
