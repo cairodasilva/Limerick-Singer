@@ -19,7 +19,6 @@ class Spotify:
             track_id = self.track_id
             track_features = self.sp.audio_features([track_id])
             valence = track_features[0]['valence']
-            print(f'The valence of the track is: {valence}')
             return valence
 def main():
     spot = Spotify("for emma forever","bon iver")

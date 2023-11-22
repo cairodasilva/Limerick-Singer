@@ -4,8 +4,8 @@ So he smoked all his socks
 and got chicken-pox
 and had to go to the vet
 
-Fitness = 0.56577779862761
+Fitness = 0.8040344435547193
 
-song  = all falls down by kanye west
+song  = white ferrari by frank ocean
 
 Generations = 0

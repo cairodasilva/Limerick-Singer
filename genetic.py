@@ -16,8 +16,8 @@ class genetic:
             self.name = name
             self.artist = artist
         else:
-            self.name = "all falls down"
-            self.artist = "kanye west"
+            self.name = "white ferrari"
+            self.artist = "frank ocean"
         self.song = SongManager(self.artist,self.name).make_song_lyrics()
         self.spot = Spotify(self.name,self.artist)
         self.nlp = NlpManager(self.song)
@@ -53,14 +53,14 @@ class genetic:
         next_generation = []
         fitnesses =[]
         sum_fitness = 0
-        for poem in self.poems:
-                fitness = poem.getFitness()
-                fitnesses.append(fitness)
-                sum_fitness +=  fitness
-        fitnessnp = np.array(fitnesses)
-        p = fitnessnp / sum_fitness
+        # for poem in self.poems:
+        #         fitness = poem.getFitness()
+        #         fitnesses.append(fitness)
+        #         sum_fitness +=  fitness
+        # fitnessnp = np.array(fitnesses)
+        #p = fitnessnp / sum_fitness
         for _ in range(len(self.poems)):
-            poem1,poem2 = np.random.choice(self.poems,p = p,size = 2,
+            poem1,poem2 = np.random.choice(self.poems,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
             new_poem.mutate()
@@ -108,9 +108,11 @@ class genetic:
         with open(dir , "r") as f:
             poem_lines = f.readlines()
         engine = pyttsx3.init()  
-        engine.setProperty('rate', 150)  # setting up new voice rate
-        engine.setProperty('volume', 0.8) 
+        engine.setProperty('rate', 140)  # setting up new voice rate
+        engine.setProperty('volume', 1) 
         for line in poem_lines:
+            if "Fitness" in line:
+                break
             engine.say(line)
             engine.runAndWait()
         return
@@ -126,7 +128,6 @@ def main():
     runner.genetic_algo_runner()
     poem = runner.get_fittest()
     runner.say(poem)
-    #runner.reperform_poem("poem_20231120_203758.txt")
     
     
     

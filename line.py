@@ -1,12 +1,10 @@
 
 import numpy as np
 from word_manager import WordManager
-
 from nlpmanager import NlpManager
 class Line:
 
     def __init__(self, line, song, nlpmanager):
-        
         self.nlp = nlpmanager
         self.line = line.split()
         self.worder = WordManager()
@@ -15,7 +13,7 @@ class Line:
     def getText(self):
         return ' '.join(self.line)
     
-    def mutate(self,array = [0,1,2,1,2]):
+    def mutate(self,array = [0,1,2,1,2,1,2]):
         mutation = np.random.choice(array)
         match mutation:
             case 0: #change rhyme word to closer to theme
@@ -27,7 +25,6 @@ class Line:
             case 2:
                 self.swap_verb()
               
-    
 
         return self
             
@@ -38,7 +35,6 @@ class Line:
         scores = []
         rhyme_words = self.worder.find_rhyme_word(end_word)
         if len(rhyme_words) == 0:
-            print("no ryhmes for "+ end_word)
             return end_word
         scores = rhyme_words.values()
         total = sum(scores)
@@ -88,16 +84,4 @@ class Line:
 
 
 
-def main():
-    line = Line("and my house its burning down")
-    print(line.getText())
-    line.change_rhyme_word()
-    print(line.getText())
-    line.swap_noun()
-    print(line.getText())
-  
-
-
-if __name__ == "__main__":
-    main()
 

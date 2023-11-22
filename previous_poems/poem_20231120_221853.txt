@@ -1,0 +1,11 @@
+My dog is really quite fellowship
+Except when he looked a cold dip
+So he smoked all his store
+and wanna galore
+and had to go to the strip
+
+Fitness = 0.4813642485200123
+
+song  = all falls down by kanye west
+
+Generations = 4

@@ -3,7 +3,7 @@ import numpy as np
 from word_manager import WordManager
 from textblob import TextBlob
 from collections import Counter
-import pyttsx3
+
 
 
 
@@ -43,6 +43,10 @@ class NlpManager:
             return (new_noun, replace_index)
         else:
             return (-1)
+    def get_similarity(self,text1,text2):
+        nlp1 = self.nlp(text1)
+        nlp2 = self.nlp(text2)
+        return nlp1.similarity(nlp2)
 
     def get_nouns(self):
         nlpsong = self.nlp(self.lyricer)
@@ -50,9 +54,10 @@ class NlpManager:
          for token in nlpsong
          if (not token.is_stop and
              not token.is_punct and
-             token.pos_ == "NOUN" and token.text != "Verse")]
+             token.pos_ == "NOUN" and token.text != "Verse" and '[' not in token.text and ']' not in token.text)]
         nouns = nouns[1:-1]
         noun_dict = Counter(nouns)
+ 
         return noun_dict
 
     def get_verbs(self):
@@ -60,9 +65,10 @@ class NlpManager:
         verbs = []
         nlpsong = self.nlp(self.lyricer)
         for token in nlpsong:
-            if(not token.is_stop and  not token.is_punct and token.pos_ == "VERB"):
+            if(not token.is_stop and  not token.is_punct and token.pos_ == "VERB"
+            and '[' not in token.text and ']' not in token.text and len(token.text)>2):
                 verb_dict[token.text] = token.tag_ 
-                
+       
         return verb_dict       
 
     def new_verb(self,text):
@@ -118,17 +124,13 @@ class NlpManager:
         doc = self.nlp(text) 
         filtered_tokens = [token for token in doc if not token.is_stop] 
         return ' '.join([token for token in filtered_tokens])
-    def say(self):
-        engine = pyttsx3.init()
-        engine.say("Hi, Cairo")
-        engine.runAndWait()
 
     def poem_song_similarity(self,poem,song):
         nlppoem = self.nlp(poem)
         nlpsong = self.nlp(song)
         return nlppoem.similarity(nlpsong)
 
-   
+
 
 
 def main():

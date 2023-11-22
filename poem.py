@@ -34,7 +34,7 @@ class Poem:
         mutated_lines = np.random.choice(lines, size = choice, replace = False)
         for line in mutated_lines: 
             mutations = np.random.randint(3) + 1
-            for _ in range (mutations):
+            for _ in range (1):
                 line = line.mutate()
         self.updateFitness()
         return self
@@ -76,8 +76,8 @@ class Poem:
         # print ("similar fitness= " , similar_coeff*similar)
         # print ("sentiment fitness= " , sentiment_coeff*sentiment)
         # print ("syllables fitness= " , syllables_coeff*syllables)
-        print ("total fitness = ",meter_coeff*meter + similar_coeff*similar
-         + sentiment_coeff*sentiment )
+        # print ("total fitness = ",meter_coeff*meter + similar_coeff*similar
+        #  + sentiment_coeff*sentiment )
         return (meter_coeff*meter + similar_coeff*similar
          + sentiment_coeff*sentiment )
 
