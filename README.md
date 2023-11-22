@@ -1,5 +1,5 @@
-# poetry-generator
-
+# Limerick-Singer
+Turn a song of your choice into a questionably good limerick!
 
 1. **Download all of the necessary elements**
    - pip install spotify
@@ -7,6 +7,7 @@
    - pip install spacy
    - pip install lyricsgenius
    - pip install spotipy
+   - pip install spotify
 2. **How to run**
    - from terminal cd in poetry-generator (or what the file is saved as)
    - run main.py by running python3 ./main.py
