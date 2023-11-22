@@ -1,3 +1,5 @@
+"""@author Cairo Dasilva, CSCI 3725, M7
+This class manages finding new ryhme worsds from the datamuse API"""
 import pronouncing
 import requests
 class WordManager:

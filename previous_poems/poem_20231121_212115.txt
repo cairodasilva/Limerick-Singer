@@ -1,0 +1,11 @@
+There was an odd fellow named Gus
+given his set of false fuss
+So he smoked all his socks
+and got lox
+and had to go to the us
+
+Fitness = 0.7246609109521934
+
+song  = white ferrari by frank ocean
+
+Generations = 3

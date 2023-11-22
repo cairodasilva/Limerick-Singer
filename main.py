@@ -1,8 +1,9 @@
-from genetic import genetic
+
+from genetic import Genetic
 import os
 
 def recite():
-    runner = genetic(0) 
+    runner = Genetic(0) 
     filename = input("Write the file name of a poem you want to reperform \
     (e.g., poem_20231121_000738.txt) ")
     file_path = os.path.join("./previous_poems", filename)
@@ -18,7 +19,7 @@ def generate():
     "What song do you want to base your poem off of? "))
     artist = str(input(
     "Which artist is that song made by?"))
-    runner = genetic(generations,name,artist)   
+    runner = Genetic(generations,name,artist)   
     runner.create_poems()
     runner.genetic_algo_runner()
     poem = runner.get_fittest()

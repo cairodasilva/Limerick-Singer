@@ -1,3 +1,5 @@
+"""@author Cairo Dasilva, CSCI 3725, M7
+This class manages the poetry generation and runs the genetic algorithm"""
 from line import Line
 import datetime
 from poem import Poem
@@ -7,7 +9,7 @@ from song_manager import SongManager
 from nlpmanager import NlpManager
 from spotify import Spotify
 import pyttsx3
-class genetic:
+class Genetic:
     def __init__(self, iterations = 4, name = '', artist=''):
         self.iterations = iterations
         self.inspiring_set = []
@@ -18,12 +20,16 @@ class genetic:
         else:
             self.name = "white ferrari"
             self.artist = "frank ocean"
+        print(self.name)
+        print(self.artist)
         self.song = SongManager(self.artist,self.name).make_song_lyrics()
         self.spot = Spotify(self.name,self.artist)
         self.nlp = NlpManager(self.song)
         self.valence = self.spot.get_valence()
     
     def create_poems(self):
+        """uses the inspiring set poem text files and 
+        turns them into poem objects"""
         dir = "./inspiring_set"
         for file in os.listdir(dir):
             with open(dir + "/" + file, "r") as f:
@@ -33,16 +39,17 @@ class genetic:
    
 
     def crossover(self,poem1,poem2):
+        """Takes in two poems and cross them over at a random pivot point"""
         num_lines = 6
         pivot = np.random.randint(0,num_lines-1)
         first_poem = poem2
         second_poem = poem1
-        if poem1.getFitness() > poem2.getFitness():
+        if poem1.get_fitness() > poem2.get_fitness():
             first_poem = poem1
             second_poem = poem2
-        section1 = first_poem.getLines()[:pivot]
+        section1 = first_poem.get_lines()[:pivot]
      
-        section2 = second_poem.getLines()[pivot:]
+        section2 = second_poem.get_lines()[pivot:]
         
         new_poem = Poem(section1 + section2,self.song,self.nlp,self.valence)
         new_poem.normalize_rhymes()
@@ -50,17 +57,19 @@ class genetic:
 
 
     def genetic_algo(self):
+        """runs one generation of the genetic algorithm, which first
+         selects which poems to cross over and then mutates the new poem  """
         next_generation = []
         fitnesses =[]
         sum_fitness = 0
-        # for poem in self.poems:
-        #         fitness = poem.getFitness()
-        #         fitnesses.append(fitness)
-        #         sum_fitness +=  fitness
-        # fitnessnp = np.array(fitnesses)
-        #p = fitnessnp / sum_fitness
+        for poem in self.poems:
+                fitness = poem.get_fitness()
+                fitnesses.append(fitness)
+                sum_fitness +=  fitness
+        fitnessnp = np.array(fitnesses)
+        p = fitnessnp / sum_fitness
         for _ in range(len(self.poems)):
-            poem1,poem2 = np.random.choice(self.poems,size = 2,
+            poem1,poem2 = np.random.choice(self.poems,p=p,size = 2,
             replace = False)
             new_poem = self.crossover(poem1,poem2)
             new_poem.mutate()
@@ -71,20 +80,26 @@ class genetic:
         self.poems = new_gen + old_gen
 
     def fittest_half(self,generation):
-        sorted_poems = sorted(generation, key = lambda x : x.getFitness())
+        """gets the fittest half of the poems, note that it takes the first half
+        because fitter poems have a lower score"""
+        sorted_poems = sorted(generation, key = lambda x : x.get_fitness())
         return sorted_poems[:int(len(generation)/2)]
 
     def genetic_algo_runner(self):
+        """iterates over a given number of generations"""
         for i in range(self.iterations):
             print(f"Running genetic algorithm for generation {i + 1}")
             self.genetic_algo() 
     def print_poems(self):
+        """prints all of the poems in the current generation"""
         for poem in self.poems:
-            print(poem.getText())
+            print(poem.get_text())
     def get_fittest(self):
-        sorted_poems = sorted(self.poems, key = lambda x : x.getFitness())
-        top_poem =  (sorted_poems[0].getText())
-        fitness = sorted_poems[0].getFitness()
+        """gets the fittest poem in the current generation and writes it to a 
+        new file in previous poems"""
+        sorted_poems = sorted(self.poems, key = lambda x : x.get_fitness())
+        top_poem =  (sorted_poems[0].get_text())
+        fitness = sorted_poems[0].get_fitness()
         split_poem  = ('\n'.join(top_poem))
         print (split_poem)
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -96,6 +111,7 @@ class genetic:
             f.write(f"Generations = {self.iterations}")
         return top_poem
     def say(self,text):
+        """says text"""
         engine = pyttsx3.init()  
         engine.setProperty('rate', 150)  # setting up new voice rate
         engine.setProperty('volume', 0.8) 
@@ -104,6 +120,7 @@ class genetic:
             engine.runAndWait()
     
     def reperform_poem(self, file):
+        """recites an old poem from previous poems"""
         dir = f"./previous_poems/{file}"
         with open(dir , "r") as f:
             poem_lines = f.readlines()
@@ -116,18 +133,7 @@ class genetic:
             engine.say(line)
             engine.runAndWait()
         return
-def main():
-    generations = int(input(
-    "How many generations would you like to run this algorithm for? "))
-    name = str(input(
-    "What song do you want to base your poem off of? "))
-    artist = str(input(
-    "Which artist is that song made by?"))
-    runner = genetic(generations,name,artist)   
-    runner.create_poems()
-    runner.genetic_algo_runner()
-    poem = runner.get_fittest()
-    runner.say(poem)
+
     
     
     

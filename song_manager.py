@@ -1,3 +1,5 @@
+"""@author Cairo Dasilva, CSCI 3725, M7
+This class creates song lyrics using the lyricsgenius API"""
 from lyricsgenius import Genius
 
 class SongManager:
@@ -9,11 +11,13 @@ class SongManager:
         self.lyrics = ''
 
     def make_song_lyrics(self):
+        """searches for the song and gets song lyrics"""
         self.lyrics = self.genius.search_song(self.artist, self.title).lyrics
 
         return self.lyrics
 
     def get_song_lyrics(self):
+        """returns the song lyrics"""
         if self.lyrics == '':
             return self.make_song_lyrics()
         return self.lyrics
